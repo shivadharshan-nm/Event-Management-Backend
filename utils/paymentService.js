@@ -1,6 +1,8 @@
-const Razorpay = require('razorpay');
-require('dotenv').config();
-const crypto = require('crypto');
+import Razorpay from 'razorpay';
+import dotenv from 'dotenv';
+import crypto from 'crypto';
+
+dotenv.config();
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -44,8 +46,4 @@ const processPayment = async (paymentDetails) => {
     }
 };
 
-module.exports = {
-    createOrder,
-    verifyPayment,
-    processPayment,
-};
+export { createOrder, verifyPayment, processPayment };

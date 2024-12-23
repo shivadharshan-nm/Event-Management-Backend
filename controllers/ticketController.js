@@ -1,13 +1,13 @@
-const Ticket = require('../models/Ticket');
-const Event = require('../models/Event');
-const User = require('../models/User');
-const { sendEmail } = require('../utils/emailService');
-const { processPayment } = require('../utils/paymentService');
-const QRCode = require('qrcode');
-const mongoose = require('mongoose');
+import Ticket from '../models/Ticket.js';
+import Event from '../models/Event.js';
+import User from '../models/User.js';
+import { sendEmail } from '../utils/emailService.js';
+import { processPayment } from '../utils/paymentService.js';
+import QRCode from 'qrcode';
+import mongoose from 'mongoose';
 
 // Create a new ticket
-const createTicket = async (req, res) => {
+export const createTicket = async (req, res) => {
     const { event, quantity, ticketTier, paymentDetails } = req.body;
     try {
         const eventDetails = await Event.findById(event);
@@ -61,7 +61,7 @@ const createTicket = async (req, res) => {
 };
 
 // Get tickets by event ID
-const getTicketsByEvent = async (req, res) => {
+export const getTicketsByEvent = async (req, res) => {
     try {
         const tickets = await Ticket.find({ event: req.params.eventId });
         res.status(200).json(tickets);
@@ -71,7 +71,7 @@ const getTicketsByEvent = async (req, res) => {
 };
 
 // Get ticket details by ticket ID
-const getTicketDetails = async (req, res) => {
+export const getTicketDetails = async (req, res) => {
     try {
         const ticket = await Ticket.findById(req.params.ticketId);
         if (!ticket) {
@@ -84,7 +84,7 @@ const getTicketDetails = async (req, res) => {
 };
 
 // Update ticket by ticket ID
-const updateTicket = async (req, res) => {
+export const updateTicket = async (req, res) => {
     const { quantity, ticketTier } = req.body;
     try {
         const ticket = await Ticket.findById(req.params.ticketId);
@@ -120,7 +120,7 @@ const updateTicket = async (req, res) => {
 };
 
 // Delete ticket by ticket ID
-const deleteTicket = async (req, res) => {
+export const deleteTicket = async (req, res) => {
     try {
         const ticket = await Ticket.findById(req.params.ticketId);
         if (!ticket) {
@@ -147,7 +147,7 @@ const deleteTicket = async (req, res) => {
 };
 
 // Cancel a ticket
-const cancelTicket = async (req, res) => {
+export const cancelTicket = async (req, res) => {
     try {
         const { ticketId } = req.body;
 
@@ -164,7 +164,7 @@ const cancelTicket = async (req, res) => {
 };
 
 // Get all tickets for a user
-const getUserTickets = async (req, res) => {
+export const getUserTickets = async (req, res) => {
     try {
         const userId = new mongoose.Types.ObjectId(req.user._id);
         const tickets = await Ticket.find({ user: userId })
@@ -177,13 +177,4 @@ const getUserTickets = async (req, res) => {
         console.error('Ticket fetch error:', error);
         res.status(500).json({ message: error.message });
     }
-};
-
-module.exports = {
-    createTicket,
-    getUserTickets,
-    getTicketsByEvent,
-    getTicketDetails,
-    updateTicket,
-    deleteTicket,
 };

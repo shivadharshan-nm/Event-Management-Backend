@@ -1,4 +1,4 @@
-const Category = require('../models/Category');
+import Category from '../models/Category.js';
 
 const validateCategory = async (req, res, next) => {
     const { category } = req.body;
@@ -15,4 +15,4 @@ const validateCategory = async (req, res, next) => {
     }
 };
 
-module.exports = validateCategory;
+export default validateCategory;

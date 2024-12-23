@@ -1,6 +1,6 @@
-const express = require('express');
-const { registerUser, loginUser, getUserProfile, updateUserProfile, getUsers, getUserById, updateUserById, deleteUserById } = require('../controllers/userController');
-const { protect } = require('../middlewares/authMiddleware');
+import express from 'express';
+import { registerUser, loginUser, getUserProfile, updateUserProfile, getUsers, getUserById, updateUserById, deleteUserById } from '../controllers/userController.js';
+import { protect } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -20,4 +20,4 @@ router.put('/:id', protect, updateUserById);
 // Route to delete a user by ID
 router.delete('/:id', protect, deleteUserById);
 
-module.exports = router;
+export default router;

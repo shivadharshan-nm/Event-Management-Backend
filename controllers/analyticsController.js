@@ -1,8 +1,8 @@
-const User = require('../models/User');
-const Event = require('../models/Event');
+import User from '../models/User.js';
+import Event from '../models/Event.js';
 
 // Get analytics for all users (admin only)
-exports.getAllUsersAnalytics = async (req, res) => {
+export const getAllUsersAnalytics = async (req, res) => {
     try {
         const users = await User.find();
         res.status(200).json(users);
@@ -12,7 +12,7 @@ exports.getAllUsersAnalytics = async (req, res) => {
 };
 
 // Get analytics for a specific user (admin only)
-exports.getUserAnalytics = async (req, res) => {
+export const getUserAnalytics = async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
         if (!user) {
@@ -25,7 +25,7 @@ exports.getUserAnalytics = async (req, res) => {
 };
 
 // Get analytics for all events (admin only)
-exports.getAllEventsAnalytics = async (req, res) => {
+export const getAllEventsAnalytics = async (req, res) => {
     try {
         const events = await Event.find();
         res.status(200).json(events);
@@ -35,7 +35,7 @@ exports.getAllEventsAnalytics = async (req, res) => {
 };
 
 // Get analytics for a specific event (admin only)
-exports.getEventAnalytics = async (req, res) => {
+export const getEventAnalytics = async (req, res) => {
     try {
         const event = await Event.findById(req.params.eventId);
         if (!event) {
@@ -48,7 +48,7 @@ exports.getEventAnalytics = async (req, res) => {
 };
 
 // Get analytics for all locations (admin only)
-exports.getAllLocationsAnalytics = async (req, res) => {
+export const getAllLocationsAnalytics = async (req, res) => {
     try {
         const locations = await Event.distinct('location');
         res.status(200).json(locations);
@@ -58,7 +58,7 @@ exports.getAllLocationsAnalytics = async (req, res) => {
 };
 
 // Get analytics for a specific location (admin only)
-exports.getLocationAnalytics = async (req, res) => {
+export const getLocationAnalytics = async (req, res) => {
     try {
         const coordinates = req.params.coordinates.split(',');
         const longitude = parseFloat(coordinates[0]);
@@ -86,7 +86,7 @@ exports.getLocationAnalytics = async (req, res) => {
 };
 
 // Get recommended events for a user (user only)
-exports.getRecommendedEvents = async (req, res) => {
+export const getRecommendedEvents = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         if (!user) {
@@ -105,7 +105,7 @@ exports.getRecommendedEvents = async (req, res) => {
 };
 
 // Get analytics for the logged-in user (user only)
-exports.getLoggedInUserAnalytics = async (req, res) => {
+export const getLoggedInUserAnalytics = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         if (!user) {

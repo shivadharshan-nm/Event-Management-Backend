@@ -1,7 +1,7 @@
-const Category = require('../models/Category.js');
+import Category from '../models/Category.js';
 
 // Create a new category
-exports.createCategory = async (req, res) => {
+export const createCategory = async (req, res) => {
     const { name, description } = req.body;
     try {
         const category = new Category({ name, description });
@@ -13,7 +13,7 @@ exports.createCategory = async (req, res) => {
 };
 
 // Get all categories
-exports.getCategories = async (req, res) => {
+export const getCategories = async (req, res) => {
     try {
         const categories = await Category.find();
         res.status(200).json(categories);
@@ -23,7 +23,7 @@ exports.getCategories = async (req, res) => {
 };
 
 // Get category by ID
-exports.getCategoryById = async (req, res) => {
+export const getCategoryById = async (req, res) => {
     try {
         const category = await Category.findById(req.params.id);
         if (!category) return res.status(404).json({ message: 'Category not found' });
@@ -34,7 +34,7 @@ exports.getCategoryById = async (req, res) => {
 };
 
 // Update a category
-exports.updateCategory = async (req, res) => {
+export const updateCategory = async (req, res) => {
     try {
         const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!category) return res.status(404).json({ message: 'Category not found' });
@@ -45,7 +45,7 @@ exports.updateCategory = async (req, res) => {
 };
 
 // Delete a category
-exports.deleteCategory = async (req, res) => {
+export const deleteCategory = async (req, res) => {
     try {
         const category = await Category.findByIdAndDelete(req.params.id);
         if (!category) return res.status(404).json({ message: 'Category not found' });

@@ -1,9 +1,9 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 // Register a new user
-exports.registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
@@ -23,7 +23,7 @@ exports.registerUser = async (req, res) => {
 };
 
 // Login a user
-exports.loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
     try {
@@ -45,7 +45,7 @@ exports.loginUser = async (req, res) => {
 };
 
 // Get user profile
-exports.getUserProfile = async (req, res) => {
+export const getUserProfile = async (req, res) => {
     try {
         if (!req.user) {
             return res.status(401).json({ message: 'Not authorized' });
@@ -63,7 +63,7 @@ exports.getUserProfile = async (req, res) => {
 };
 
 // Update user profile
-exports.updateUserProfile = async (req, res) => {
+export const updateUserProfile = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
@@ -87,7 +87,7 @@ exports.updateUserProfile = async (req, res) => {
 };
 
 // Get all users
-exports.getUsers = async (req, res) => {
+export const getUsers = async (req, res) => {
     try {
         const users = await User.find();
         res.status(200).json(users);
@@ -97,7 +97,7 @@ exports.getUsers = async (req, res) => {
 };
 
 // Get user by ID
-exports.getUserById = async (req, res) => {
+export const getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) {
@@ -110,7 +110,7 @@ exports.getUserById = async (req, res) => {
 };
 
 // Update user by ID
-exports.updateUserById = async (req, res) => {
+export const updateUserById = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!user) {
@@ -123,7 +123,7 @@ exports.updateUserById = async (req, res) => {
 };
 
 // Delete user by ID
-exports.deleteUserById = async (req, res) => {
+export const deleteUserById = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {

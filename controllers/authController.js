@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const keys = require('../config/keys');
-const nodemailer = require('nodemailer');
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import User from '../models/User.js';
+import keys from '../config/keys.js';
+import nodemailer from 'nodemailer';
 
 // Generate JWT Token
 const generateToken = (payload) => {
@@ -15,27 +15,45 @@ const generateOTP = () => {
 };
 
 // Send OTP Email
-// const sendOTPEmail = async (email, otp) => {
-//   const transporter = nodemailer.createTransport({
-//     service: 'Gmail',
-//     auth: {
-//       user: keys.emailUser,
-//       pass: keys.emailPass,
-//     },
-//   });
+const sendOTPEmail = async (email, otp) => {
+  try {
+    // Create transport
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_SERVICE_USER,
+        pass: process.env.EMAIL_SERVICE_PASS
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
 
-//   const mailOptions = {
-//     from: keys.emailUser,
-//     to: email,
-//     subject: 'Password Reset OTP',
-//     text: `Your OTP for password reset is ${otp}`,
-//   };
+    // Email template
+    const mailOptions = {
+      from: `"Event Management" <${process.env.EMAIL_SERVICE_USER}>`,
+      to: email,
+      subject: 'Password Reset OTP',
+      html: `
+        <h2>Password Reset Request</h2>
+        <p>Your OTP for password reset is: <strong>${otp}</strong></p>
+        <p>This OTP will expire in 1 hour.</p>
+        <p>If you did not request this reset, please ignore this email.</p>
+      `
+    };
 
-//   await transporter.sendMail(mailOptions);
-// };
+    // Send email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: %s', info.messageId);
+    return true;
+  } catch (error) {
+    console.error('Email sending failed:', error);
+    throw new Error('Failed to send OTP email');
+  }
+};
 
 // Register User
-exports.registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   const { name, username, email, password, phone, profilePicture, role } = req.body;
 
   try {
@@ -75,7 +93,7 @@ exports.registerUser = async (req, res) => {
 };
 
 // Login User
-exports.loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -105,7 +123,7 @@ exports.loginUser = async (req, res) => {
 };
 
 // Reset Password
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   const { email, newPassword } = req.body;
 
   try {
@@ -127,7 +145,7 @@ exports.resetPassword = async (req, res) => {
 };
 
 // Request OTP for Password Reset
-exports.requestPasswordReset = async (req, res) => {
+export const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -142,7 +160,7 @@ exports.requestPasswordReset = async (req, res) => {
 
     await user.save();
 
-    // await sendOTPEmail(email, otp);
+    await sendOTPEmail(email, otp);
 
     // Log the OTP for debugging purposes
     console.log(`OTP for ${email}: ${otp}`);
@@ -155,7 +173,7 @@ exports.requestPasswordReset = async (req, res) => {
 };
 
 // Verify OTP and Reset Password
-exports.verifyOTPAndResetPassword = async (req, res) => {
+export const verifyOTPAndResetPassword = async (req, res) => {
   const { email, otp, newPassword } = req.body;
 
   try {
@@ -183,7 +201,7 @@ exports.verifyOTPAndResetPassword = async (req, res) => {
 };
 
 // Retrieve Username
-exports.retrieveUsername = async (req, res) => {
+export const retrieveUsername = async (req, res) => {
   const { email } = req.body;
 
   try {

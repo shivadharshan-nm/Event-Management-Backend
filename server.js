@@ -1,23 +1,15 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const connectDB = require('./config/db');
-const eventRoutes = require('./routes/eventRoutes');
+import dotenv from 'dotenv';
+import connectDB from './config/db.js';
+import app from './app.js';
 
-const app = express();
+dotenv.config();
 
 const PORT = process.env.PORT || 5002;
 
-// Connect to database
+// Connect to the database
 connectDB();
 
-// Enable CORS for all routes
-app.use(cors());
-
-app.use(express.json());
-
-app.use('/api/events', eventRoutes);
-
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

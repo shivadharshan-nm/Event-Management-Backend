@@ -1,13 +1,13 @@
-const express = require('express');
-const { registerUser, loginUser, requestPasswordReset, verifyOTPAndResetPassword, retrieveUsername } = require('../controllers/authController');
-const { protect } = require('../middlewares/authMiddleware');
+import express from 'express';
+import { registerUser, loginUser, requestPasswordReset, verifyOTPAndResetPassword, retrieveUsername } from '../controllers/authController.js';
 
 const router = express.Router();
 
-router.post('/register', registerUser);
+// Define auth routes
 router.post('/login', loginUser);
+router.post('/register', registerUser);
 router.post('/request-password-reset', requestPasswordReset);
 router.post('/verify-otp-reset-password', verifyOTPAndResetPassword);
 router.post('/retrieve-username', retrieveUsername);
 
-module.exports = router;
+export default router;

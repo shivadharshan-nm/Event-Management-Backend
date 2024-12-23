@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     mongoURI: process.env.MONGO_URI,
     jwtSecret: process.env.JWT_SECRET,
     razorpayKeyId: process.env.RAZORPAY_KEY_ID,

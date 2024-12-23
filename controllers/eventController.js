@@ -1,7 +1,7 @@
-const Event = require('../models/Event');
+import Event from '../models/Event.js';
 
 // Create a new event
-const createEvent = async (req, res) => {
+export const createEvent = async (req, res) => {
     const { name, description, date, time, location, category, media, ticketPricing, availableTiers } = req.body;
     try {
         const event = new Event({
@@ -24,7 +24,7 @@ const createEvent = async (req, res) => {
 };
 
 // Get all events
-const getEvents = async (req, res) => {
+export const getEvents = async (req, res) => {
     try {
         const { search } = req.query;
         let query = {};
@@ -46,10 +46,20 @@ const getEvents = async (req, res) => {
     }
 };
 
-// Get event by ID
-const getEventById = async (req, res) => {
+// Get event by custom ID
+export const getEventById = async (req, res) => {
     try {
-        const event = await Event.findById(req.params.id);
+        const { id } = req.params;
+
+        // Convert id to integer
+        const customId = parseInt(id, 10);
+
+        // Check if the conversion was successful
+        if (isNaN(customId)) {
+            return res.status(400).json({ message: 'Invalid event ID format' });
+        }
+
+        const event = await Event.findOne({ id: customId });
         if (!event) {
             return res.status(404).json({ message: 'Event not found' });
         }
@@ -60,7 +70,7 @@ const getEventById = async (req, res) => {
 };
 
 // Update event by ID
-const updateEvent = async (req, res) => {
+export const updateEvent = async (req, res) => {
     const { name, description, date, time, location, category, media, ticketPricing } = req.body;
     try {
         const event = await Event.findById(req.params.id);
@@ -85,7 +95,7 @@ const updateEvent = async (req, res) => {
 };
 
 // Delete event by ID
-const deleteEvent = async (req, res) => {
+export const deleteEvent = async (req, res) => {
     try {
         const event = await Event.findById(req.params.id);
         if (!event) {
@@ -97,12 +107,4 @@ const deleteEvent = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
-
-module.exports = {
-    createEvent,
-    getEvents,
-    getEventById,
-    updateEvent,
-    deleteEvent
 };

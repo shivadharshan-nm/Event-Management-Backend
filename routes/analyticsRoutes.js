@@ -1,6 +1,5 @@
-const express = require('express');
-const
- {
+import express from 'express';
+import {
     getAllUsersAnalytics,
     getUserAnalytics,
     getAllEventsAnalytics,
@@ -9,9 +8,9 @@ const
     getLocationAnalytics,
     getRecommendedEvents,
     getLoggedInUserAnalytics
-} = require('../controllers/analyticsController');
-const { protect } = require('../middlewares/authMiddleware');
-const admin = require('../middlewares/adminMiddleware');
+} from '../controllers/analyticsController.js';
+import { protect } from '../middlewares/authMiddleware.js';
+import admin from '../middlewares/adminMiddleware.js';
 
 const router = express.Router();
 
@@ -24,4 +23,4 @@ router.get('/locations/:coordinates', protect, admin, getLocationAnalytics);
 router.get('/recommended', protect, getRecommendedEvents);
 router.get('/me', protect, getLoggedInUserAnalytics);
 
-module.exports = router;
+export default router;

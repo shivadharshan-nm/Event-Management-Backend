@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const keys = require('../config/keys');
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+import keys from '../config/keys.js';
 
 // Protect middleware to verify JWT token and authenticate user
 const protect = async (req, res, next) => {
@@ -22,4 +22,4 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+export { protect };
