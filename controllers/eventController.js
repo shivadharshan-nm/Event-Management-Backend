@@ -34,7 +34,7 @@ export const getEvents = async (req, res) => {
                 $or: [
                     { name: { $regex: search, $options: 'i' } },
                     { description: { $regex: search, $options: 'i' } },
-                    { 'location.coordinates': { $regex: search, $options: 'i' } }
+                    { location: { $regex: search, $options: 'i' } }
                 ]
             };
         }
@@ -69,21 +69,11 @@ export const getEventById = async (req, res) => {
     }
 };
 
-// Update event by custom ID
+// Update event by ID
 export const updateEvent = async (req, res) => {
     const { name, description, date, time, location, category, media, ticketPricing } = req.body;
     try {
-        const { id } = req.params;
-
-        // Convert id to integer
-        const customId = parseInt(id, 10);
-
-        // Check if the conversion was successful
-        if (isNaN(customId)) {
-            return res.status(400).json({ message: 'Invalid event ID format' });
-        }
-
-        const event = await Event.findOne({ id: customId });
+        const event = await Event.findById(req.params.id);
         if (!event) {
             return res.status(404).json({ message: 'Event not found' });
         }
@@ -100,28 +90,20 @@ export const updateEvent = async (req, res) => {
         await event.save();
         res.status(200).json(event);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
-// Delete event by custom ID
+// Delete event by ID
 export const deleteEvent = async (req, res) => {
     try {
-        const { id } = req.params;
-
-        // Convert id to integer
-        const customId = parseInt(id, 10);
-
-        // Check if the conversion was successful
-        if (isNaN(customId)) {
-            return res.status(400).json({ message: 'Invalid event ID format' });
-        }
-
-        const event = await Event.findOneAndDelete({ id: customId });
+        const event = await Event.findById(req.params.id);
         if (!event) {
             return res.status(404).json({ message: 'Event not found' });
         }
-        res.status(200).json({ message: 'Event deleted successfully' });
+
+        await event.remove();
+        res.status(200).json({ message: 'Event removed' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
