@@ -6,8 +6,9 @@ const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
-
+//router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
+router.get('/profile', protect, getUserProfile);
+router.put('/profile', protect, updateUserProfile);
 // Route to get all users
 router.get('/', protect, getUsers);
 
